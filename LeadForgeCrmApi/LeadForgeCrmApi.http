@@ -1,0 +1,6 @@
+@LeadForgeCrmApi_HostAddress = http://localhost:5095
+
+GET {{LeadForgeCrmApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

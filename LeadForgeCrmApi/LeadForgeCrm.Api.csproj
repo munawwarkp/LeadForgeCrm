@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LeadForgeCrm.Application\LeadForgeCrm.Application.csproj" />
+    <ProjectReference Include="..\LeadForgeCrm.Infrastructure\LeadForgeCrm.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
