@@ -14,10 +14,10 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public DateTime ActivityDate { get; set; }
 
         public int LeadId { get; set; }
-        public Lead Lead { get; set; } = null!;
+        public Lead Lead { get; set; } = null!;  //many to one
 
         public int UserId { get; set; }
-        public User User { get; set; } = null!;
+        public User User { get; set; } = null!; //many to one
 
     }
 }

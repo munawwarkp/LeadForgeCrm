@@ -1,6 +1,7 @@
 
 using LeadForgeCrm.Application;
 using LeadForgeCrm.Infrastructure;
+using LeadForgeCrm.Infrastructure.Seeding;
 
 namespace LeadForgeCrmApi
 {
@@ -17,6 +18,9 @@ namespace LeadForgeCrmApi
             //register services from infrastructure layer
             builder.Services.AddInfrastructureServices(builder.Configuration);
 
+            builder.Services.AddHttpContextAccessor();
+
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -25,6 +29,14 @@ namespace LeadForgeCrmApi
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+
+            // Seed plans at startup
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var planSeeder = scope.ServiceProvider.GetRequiredService<PlanSeeder>();
+            //    await planSeeder.SeedAsync(); // top-level await
+            //}
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

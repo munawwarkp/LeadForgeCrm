@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeadForgeCrm.Domain.Entities.Base
+namespace LeadForgeCrm.Application.Dtos.Responses
 {
-    public abstract class BaseTenantEntity :BaseEntity
+    public class SignupResponse
     {
         public int TenantId { get; set; }
+        public int UserId { get; set; }
     }
 }

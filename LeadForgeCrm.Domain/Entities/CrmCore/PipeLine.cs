@@ -13,6 +13,7 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public bool IsDefault { get; set; }
 
         public ICollection<PipelineStage> Stages { get; set; } = new List<PipelineStage>();
+        //multiple pipelines per tenant
     }
 
 }

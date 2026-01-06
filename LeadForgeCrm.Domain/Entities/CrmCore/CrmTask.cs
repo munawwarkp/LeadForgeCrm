@@ -15,6 +15,7 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public string Status { get; set; } = null!;
 
         public int AssignedToUserId { get; set; }
+        public User AssignedToUser { get; set; } = null!;
         public int? LeadId { get; set; }
     }
 }

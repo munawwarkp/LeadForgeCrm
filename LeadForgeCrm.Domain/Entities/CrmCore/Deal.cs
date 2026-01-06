@@ -20,5 +20,8 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public decimal Amount { get; set; }
         public DateTime? ExpectedCloseDate { get; set; }
 
+        public int Order { get; set; }   // card order inside a stage
+
+
     }
 }

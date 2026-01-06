@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LeadForgeCrm.Application.Interfaces;
+using LeadForgeCrm.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace LeadForgeCrm.Infrastructure.Tenancy

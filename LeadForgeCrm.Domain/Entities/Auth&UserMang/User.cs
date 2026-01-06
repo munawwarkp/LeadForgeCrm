@@ -24,5 +24,9 @@ namespace LeadForgeCrm.Domain.Entities
         public Tenant Tenant { get; set; } = null!;
 
 
+        // Optional: list of activities performed by this user
+        public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+
+
     }
 }

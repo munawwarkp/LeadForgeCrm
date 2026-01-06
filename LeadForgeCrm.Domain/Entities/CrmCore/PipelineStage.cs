@@ -15,7 +15,15 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public string Name { get; set; } = null!;
         // Example: New Lead, Site Visit, Negotiation, Closed Won
         public int Order { get; set; }
-        // Used for drag & drop ordering
+        // Used for drag & drop,column ordering
+
+        public bool IsClosed { get; set; }
+        public bool IsWon { get; set; }
+
+
+
+        public ICollection<Deal> Deals { get; set; } = new List<Deal>();
+        //for get all deals in a stage
 
     }
 }

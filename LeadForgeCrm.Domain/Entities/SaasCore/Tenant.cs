@@ -9,12 +9,16 @@ namespace LeadForgeCrm.Domain.Entities.SaasCore
 {
     public class Tenant : BaseEntity    
     {
-        public string CompanyName { get; set; } = null!;
-        public string Subdomain { get; set; } = null!;
-        public int PlanId { get; set; }
-        public bool IsActive { get; set; } = true;
+        public string? CompanyName { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string Currency { get; set; } = "INR";
 
-        public Plan Plan { get; set; } = null!;
+        public bool IsActive { get; set; } = true;
+        public bool IsOnboardingCompleted { get; set; } = false;
+
+
+        // One-to-one relationship with Subscription
+        public Subscription? Subscription { get; set; } = null!; // nullable if a tenant may exist without subscription
 
         public ICollection<User> Users { get; set; }=new List<User>();
     }

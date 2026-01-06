@@ -9,13 +9,18 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 {
     public class Contact : BaseTenantEntity
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string Company { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string? Phone { get; set; }
 
-        public int OwnerUserId { get; set; }
+
+        //public string Company { get; set; }
+
+        public int CompanyId { get; set; }
+        public Company Company { get; set; } = null!;
+
+        public int OwnerId { get; set; }
         public User Owner { get; set; } = null!;
 
 
