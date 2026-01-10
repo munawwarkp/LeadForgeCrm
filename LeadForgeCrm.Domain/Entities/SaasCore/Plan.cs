@@ -22,7 +22,5 @@ namespace LeadForgeCrm.Domain.Entities.SaasCore
         public bool IsActive { get; set; } = true;
         public bool IsTrial { get; set; } = false;
 
-        public ICollection<Tenant> Tenants { get; set; } = new List<Tenant>();
-
     }
 }

@@ -9,7 +9,7 @@ namespace LeadForgeCrm.Domain.Interfaces
 {
     public interface IRoleRepository
     {
-        Task AddAsync(Role role);
+        void Add(Role role);
         Task<Role?> GetByNameAsync(int tenantId, string roleName);
     }
 }

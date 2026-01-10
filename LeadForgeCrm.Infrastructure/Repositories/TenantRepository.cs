@@ -9,24 +9,24 @@ using LeadForgeCrm.Infrastructure.Data;
 
 namespace LeadForgeCrm.Infrastructure.Repositories
 {
-    public class TenantRepository:ITenantRepository
-    {
-        private readonly TenantlessDbContext _context;
-        public TenantRepository(TenantlessDbContext context) 
+        public class TenantRepository:ITenantRepository
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-        }
+            private readonly AppDbContext _context;
+            public TenantRepository(AppDbContext context) 
+            {
+                _context = context ?? throw new ArgumentNullException(nameof(context));
+            }
 
-        public async Task<Tenant> AddAsync(Tenant tenant)
-        {
-            var result = _context.Tenants.Add(tenant);
-            await _context.SaveChangesAsync();
-            return result.Entity;
-        }
+            public Tenant Add(Tenant tenant)
+            {
+                var result = _context.Tenants.Add(tenant);
+                //await _context.SaveChangesAsync();
+                return result.Entity;
+            }
 
-        public async Task<Tenant?> GetIdByAsync(int tenantId)
-        {
-            return await _context.Tenants.FindAsync(tenantId);
+            public async Task<Tenant?> GetIdByAsync(int tenantId)
+            {
+                return await _context.Tenants.FindAsync(tenantId);
+            }
         }
-    }
 }

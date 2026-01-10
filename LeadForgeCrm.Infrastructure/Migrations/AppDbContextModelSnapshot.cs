@@ -53,9 +53,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LeadId");
@@ -63,8 +60,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasIndex("TenantId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Activities");
                 });
@@ -185,6 +180,7 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -251,8 +247,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasIndex("AssignedToId");
 
                     b.HasIndex("ContactId");
-
-                    b.HasIndex("TenantId");
 
                     b.HasIndex("TenantId", "CreatedAt");
 
@@ -377,12 +371,16 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Plans");
                 });
@@ -406,9 +404,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -450,12 +445,7 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PlanId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PlanId");
 
                     b.ToTable("Tenants");
                 });
@@ -511,14 +501,10 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Activities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("LeadForgeCrm.Domain.Entities.User", null)
-                        .WithMany("Activities")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Lead");
 
@@ -609,7 +595,7 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Plan", "Plan")
                         .WithMany()
                         .HasForeignKey("PlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
@@ -623,13 +609,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", b =>
-                {
-                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Plan", null)
-                        .WithMany("Tenants")
-                        .HasForeignKey("PlanId");
-                });
-
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.User", b =>
                 {
                     b.HasOne("LeadForgeCrm.Domain.Entities.Role", "Role")
@@ -638,15 +617,13 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", null)
                         .WithMany("Users")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
-
-                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Company", b =>
@@ -674,11 +651,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.PipelineStage", b =>
                 {
                     b.Navigation("Deals");
-                });
-
-            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SaasCore.Plan", b =>
-                {
-                    b.Navigation("Tenants");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", b =>

@@ -24,10 +24,12 @@ namespace LeadForgeCrm.Infrastructure.Repositories
                     .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task AddAsync(User user)
+        public void Add(User user)
         {
-            _context.Users .Add(user);
-            await _context.SaveChangesAsync();
+            _context.Users.Add(user);
+
+            //move SaveChangesAsync to out of repositories-for unit of work pattern, so here repo, just track, no save
+            //await _context.SaveChangesAsync();
         }
     }
 }

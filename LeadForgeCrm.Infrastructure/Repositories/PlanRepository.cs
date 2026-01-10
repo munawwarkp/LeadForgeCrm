@@ -12,8 +12,8 @@ namespace LeadForgeCrm.Infrastructure.Repositories
 {
     public class PlanRepository:IplanRepository
     {
-        private readonly TenantlessDbContext _context;
-        public PlanRepository(TenantlessDbContext context) 
+        private readonly AppDbContext _context;
+        public PlanRepository(AppDbContext context) 
         {
             _context = context;
         }
@@ -26,6 +26,11 @@ namespace LeadForgeCrm.Infrastructure.Repositories
         {
             await _context.Plans.AddRangeAsync(plans);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Plan> GetDefaultFreePlanAsync()
+        {
+            return await _context.Plans.FirstOrDefaultAsync(p => p.IsTrial);
         }
 
     }

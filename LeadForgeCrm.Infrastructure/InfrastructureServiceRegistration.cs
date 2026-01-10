@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LeadForgeCrm.Application.Interfaces;
 using LeadForgeCrm.Domain.Interfaces;
 using LeadForgeCrm.Infrastructure.Data;
 using LeadForgeCrm.Infrastructure.Options;
 using LeadForgeCrm.Infrastructure.Repositories;
 using LeadForgeCrm.Infrastructure.Seeding;
 using LeadForgeCrm.Infrastructure.Tenancy;
+using LeadForgeCrm.Infrastructure.Uow;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,21 +31,16 @@ namespace LeadForgeCrm.Infrastructure
                 options.UseSqlServer(connOptions.DefaultConnection);
             });
 
-            services.AddDbContext<TenantlessDbContext>((provider, options) =>
-            {
-                var connOptions = provider.GetRequiredService<IOptions<ConnectionStringOptions>>().Value;
-                if (string.IsNullOrWhiteSpace(connOptions.DefaultConnection))
-                    throw new InvalidOperationException("DefaultConnection string is not configured.");
-
-                options.UseSqlServer(connOptions.DefaultConnection);
-            });
-
+        
             services.AddScoped<ITenantProvider, TenantProvider>();
 
             services.AddScoped<ITenantRepository, TenantRepository>();
             services.AddScoped<IUserRepository, UserRepository>();  
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IplanRepository, PlanRepository>();
+            services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             services.AddScoped<PlanSeeder>();

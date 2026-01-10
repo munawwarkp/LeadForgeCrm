@@ -18,17 +18,17 @@ namespace LeadForgeCrm.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(Role role)
+        public void Add(Role role)
         {
-            await _context.Roles.AddAsync(role);
-            await _context.SaveChangesAsync();
+             _context.Roles.AddAsync(role);
+            //await _context.SaveChangesAsync();
         }
 
         public async Task<Role?> GetByNameAsync(int tenantId, string roleName)
         {
             return await _context.Roles
+                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(r =>
-                    r.TenantId == tenantId &&
                     r.Name == roleName
                 );
         }

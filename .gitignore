@@ -3,6 +3,11 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+#appsetting.json
+LeadForgeCrmApi/appsettings.json
+LeadForgeCrmApi/appsettings.*.json
+
+
 # dotenv files
 .env
 

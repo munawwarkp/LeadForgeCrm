@@ -31,7 +31,7 @@ namespace LeadForgeCrm.Infrastructure.Data
             _tenantProvider = null; // no tenant at design time
         }
 
-        public int CurrentTenantId => _tenantProvider.TenantId;
+        public int? CurrentTenantId => _tenantProvider?.TenantId;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,34 +39,77 @@ namespace LeadForgeCrm.Infrastructure.Data
 
             //global tenant query filters
             modelBuilder.Entity<User>()
-                .HasQueryFilter(u => u.TenantId == CurrentTenantId);
+                .HasQueryFilter(u =>
+                    !CurrentTenantId.HasValue || u.TenantId == CurrentTenantId);
+
+            modelBuilder.Entity<Role>()
+                .HasQueryFilter(r =>
+                    !CurrentTenantId.HasValue || r.TenantId == CurrentTenantId);
 
             modelBuilder.Entity<Contact>()
-                .HasQueryFilter(c => c.TenantId == CurrentTenantId);
+                .HasQueryFilter(c =>
+                   !CurrentTenantId.HasValue || c.TenantId == CurrentTenantId);
 
             modelBuilder.Entity<Lead>()
-                .HasQueryFilter(l => l.TenantId == CurrentTenantId);
+                .HasQueryFilter(l => 
+                    !CurrentTenantId.HasValue || l.TenantId == CurrentTenantId);
 
             modelBuilder.Entity<Deal>()
-                .HasQueryFilter(d => d.TenantId == CurrentTenantId);
+                .HasQueryFilter(d =>
+                     !CurrentTenantId.HasValue || d.TenantId == CurrentTenantId);
 
             modelBuilder.Entity<Activity>()
-                .HasQueryFilter(a => a.TenantId == CurrentTenantId);
+                .HasQueryFilter(a =>
+                    !CurrentTenantId.HasValue || a.TenantId == CurrentTenantId);
 
             modelBuilder.Entity<CrmTask>()
-                .HasQueryFilter(t => t.TenantId == CurrentTenantId);
+                .HasQueryFilter(t =>
+                    !CurrentTenantId.HasValue || t.TenantId == CurrentTenantId);
             
             modelBuilder.Entity<PipeLine>()
-                .HasQueryFilter(p => p.TenantId == CurrentTenantId);
+                .HasQueryFilter(p => 
+                    !CurrentTenantId.HasValue || p.TenantId == CurrentTenantId);
 
             modelBuilder.Entity<PipelineStage>()
-                .HasQueryFilter(ps => ps.TenantId == CurrentTenantId);
+                .HasQueryFilter(ps =>
+                    !CurrentTenantId.HasValue || ps.TenantId == CurrentTenantId);
 
-            modelBuilder.Entity<Company>()
-                .HasQueryFilter(c => c.TenantId == CurrentTenantId);
 
-            modelBuilder.Entity<Subscription>()
-                .HasQueryFilter(s => s.TenantId == CurrentTenantId);
+
+
+            //tenant configuration
+
+            modelBuilder.Entity<Tenant>()
+                .HasOne(t => t.Subscription)
+                .WithOne(s => s.Tenant)
+                .HasForeignKey<Subscription>(s => s.TenantId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //subscription configuration
+
+            modelBuilder.Entity<Subscription>(entity =>
+            {
+                // One subscription per tenant
+                entity.HasIndex(s => s.TenantId)
+                      .IsUnique();
+
+                // Subscription → Plan (many : 1)
+                entity.HasOne(s => s.Plan)
+                .WithMany()
+                .HasForeignKey(s => s.PlanId)
+                .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            //plan configuration
+            modelBuilder.Entity<Plan>(entity =>
+            {
+                entity.Property(p => p.Price)
+                      .HasPrecision(18, 2)
+                      .IsRequired();
+
+                entity.HasIndex(p => p.Name)
+                      .IsUnique();
+            });
 
 
             modelBuilder.Entity<User>(entity =>
@@ -80,26 +123,7 @@ namespace LeadForgeCrm.Infrastructure.Data
                       .WithMany() // or .WithMany(r => r.Users) if Role has Users collection
                       .HasForeignKey(u => u.RoleId)
                       .OnDelete(DeleteBehavior.Restrict); // prevent cascading delete of users if role is deleted
-
-                // 3️⃣ Configure Tenant relationship and delete behavior
-                entity.HasOne(u => u.Tenant)
-                      .WithMany(t => t.Users)
-                      .HasForeignKey(u => u.TenantId)
-                      .OnDelete(DeleteBehavior.Restrict); // prevent cascading delete of users if tenant is deleted
             });
-
-
-            // Optional indexes (recommended)
-            modelBuilder.Entity<Lead>()
-                .HasIndex(l => new { l.TenantId ,l.CreatedAt});
-
-            modelBuilder.Entity<Contact>()
-                .HasIndex(c => c.TenantId);
-
-
-
-
-
 
             modelBuilder.Entity<Contact>(entity =>
             {
@@ -135,21 +159,26 @@ namespace LeadForgeCrm.Infrastructure.Data
                       .OnDelete(DeleteBehavior.Restrict);
 
                 // Index for multi-tenancy
-                entity.HasIndex(l => l.TenantId);
+                entity.HasIndex(l => new { l.TenantId, l.CreatedAt });
             });
 
+            modelBuilder.Entity<Deal>(entity =>
+            {
+                entity.Property(d => d.Amount)
+                      .HasPrecision(18,2)
+                      .IsRequired();
+            });
 
             modelBuilder.Entity<Activity>(entity =>
             {
-                // Lead relationship
                 entity.HasOne(a => a.Lead)
-                      .WithMany(l => l.Activities) // Lead should have ICollection<Activity> Activities
-                      .HasForeignKey(a => a.LeadId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(l => l.Activities) // Lead has ICollection<Activity>
+                    .HasForeignKey(a => a.LeadId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 // User relationship
                 entity.HasOne(a => a.User)
-                      .WithMany() // or .WithMany(u => u.Activities) if User has ICollection<Activity>
+                      .WithMany(u => u.Activities) // ← specify the navigation collection
                       .HasForeignKey(a => a.UserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
@@ -162,9 +191,13 @@ namespace LeadForgeCrm.Infrastructure.Data
 
         //dbsets (tables)
 
+        public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+
+
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Subscription> Subscriptions { get; set; }
 
 
         public DbSet<Contact> Contacts { get; set; }

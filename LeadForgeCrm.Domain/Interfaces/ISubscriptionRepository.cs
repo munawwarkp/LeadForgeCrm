@@ -7,10 +7,8 @@ using LeadForgeCrm.Domain.Entities.SaasCore;
 
 namespace LeadForgeCrm.Domain.Interfaces
 {
-    public interface ITenantRepository
+    public interface ISubscriptionRepository
     {
-        Tenant Add(Tenant tenant);
-        Task<Tenant?> GetIdByAsync(int tenantId);
-
+        void AddSubscription(Subscription subscription);
     }
 }

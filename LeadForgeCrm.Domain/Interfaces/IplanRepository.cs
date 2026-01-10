@@ -11,5 +11,6 @@ namespace LeadForgeCrm.Domain.Interfaces
     {
         Task<bool> ExistsByNameAsync(string name);
         Task AddRangeAsync(IEnumerable<Plan> plans);
+        Task<Plan> GetDefaultFreePlanAsync();
     }
 }
