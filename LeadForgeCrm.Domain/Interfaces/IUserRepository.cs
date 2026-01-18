@@ -10,6 +10,7 @@ namespace LeadForgeCrm.Domain.Interfaces
     public interface IUserRepository
     {
         Task<User?> GetEmailAsync(string email);
+        Task<User?> GetByIdAsync(int id);
         void Add(User user);
 
     }

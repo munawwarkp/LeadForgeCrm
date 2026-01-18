@@ -47,6 +47,8 @@ namespace LeadForgeCrmApi
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
 

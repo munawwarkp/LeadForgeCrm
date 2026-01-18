@@ -7,6 +7,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using LeadForgeCrm.Domain.Entities;
+using LeadForgeCrm.Domain.Entities.Auth_UserMang;
 using LeadForgeCrm.Domain.Entities.Base;
 using LeadForgeCrm.Domain.Entities.CrmCore;
 using LeadForgeCrm.Domain.Entities.SaasCore;
@@ -75,6 +76,9 @@ namespace LeadForgeCrm.Infrastructure.Data
                     !CurrentTenantId.HasValue || ps.TenantId == CurrentTenantId);
 
 
+            modelBuilder.Entity<RefreshToken>()
+                .HasQueryFilter(rt =>
+                    !CurrentTenantId.HasValue || rt.TenantId == CurrentTenantId);
 
 
             //tenant configuration
@@ -125,6 +129,14 @@ namespace LeadForgeCrm.Infrastructure.Data
                       .OnDelete(DeleteBehavior.Restrict); // prevent cascading delete of users if role is deleted
             });
 
+            modelBuilder.Entity<Company>(entity =>
+            {
+                entity.HasOne(c => c.Tenant)
+                      .WithMany()
+                      .HasForeignKey(c => c.TenantId)
+                      .OnDelete(DeleteBehavior.Restrict);   // <-- important
+            });
+
             modelBuilder.Entity<Contact>(entity =>
             {
                 // Owner relationship
@@ -138,6 +150,11 @@ namespace LeadForgeCrm.Infrastructure.Data
                       .WithMany(comp => comp.Contacts)
                       .HasForeignKey(c => c.CompanyId)
                       .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(c => c.Tenant)
+                     .WithMany()
+                     .HasForeignKey(c => c.TenantId)
+                     .OnDelete(DeleteBehavior.Restrict);
 
                 // Index for multi-tenancy
                 entity.HasIndex(c => c.TenantId);
@@ -186,7 +203,30 @@ namespace LeadForgeCrm.Infrastructure.Data
                 entity.HasIndex(a => a.TenantId);
             });
 
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasIndex(rt => rt.Token)
+                       .IsUnique();
 
+                entity.HasOne(x => x.User)
+                     .WithMany()
+                     .HasForeignKey(x => x.UserId)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(x => x.Tenant)
+                   .WithMany()
+                   .HasForeignKey(x => x.TenantId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            });
+
+            modelBuilder.Entity<CrmTask>(entity =>
+            {
+                entity.HasOne(t => t.Tenant)
+                        .WithMany()
+                        .HasForeignKey(t => t.TenantId)
+                        .OnDelete(DeleteBehavior.Restrict);
+            });
         }
 
         //dbsets (tables)
@@ -198,6 +238,7 @@ namespace LeadForgeCrm.Infrastructure.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         public DbSet<Contact> Contacts { get; set; }

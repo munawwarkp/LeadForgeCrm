@@ -13,34 +13,40 @@ namespace LeadForgeCrm.Infrastructure.Uow
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
-        private IDbContextTransaction? _transaction;
+        //private IDbContextTransaction? _transaction;
         public UnitOfWork(AppDbContext context) {
             _context = context;
         }
-        public async Task BeginTransactionAsync(CancellationToken ct = default)
-        {
-            if (_transaction != null)
-                return;
 
-            _transaction = await _context.Database.BeginTransactionAsync(ct);
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task CommitAsync(CancellationToken ct = default)
-        {
-            if (_transaction == null) throw new InvalidOperationException("No active transaction.");
+        //public async Task BeginTransactionAsync(CancellationToken ct = default)
+        //{
+        //    if (_transaction != null)
+        //        return;
 
-            await _context.SaveChangesAsync(ct);   // commit all changes tracked by repositories
-            await _transaction.CommitAsync(ct);
-            await _transaction.DisposeAsync();
-            _transaction = null;
-        }
+        //    _transaction = await _context.Database.BeginTransactionAsync(ct);
+        //}
 
-        public async Task RollbackAsync(CancellationToken ct = default)
-        {
-            if (_transaction == null) return;
-            await _transaction.RollbackAsync(ct);
-            await _transaction.DisposeAsync();
-            _transaction = null;
-        }
+        //public async Task CommitAsync(CancellationToken ct = default)
+        //{
+        //    if (_transaction == null) throw new InvalidOperationException("No active transaction.");
+
+        //    await _context.SaveChangesAsync(ct);   // commit all changes tracked by repositories
+        //    await _transaction.CommitAsync(ct);
+        //    await _transaction.DisposeAsync();
+        //    _transaction = null;
+        //}
+
+        //public async Task RollbackAsync(CancellationToken ct = default)
+        //{
+        //    if (_transaction == null) return;
+        //    await _transaction.RollbackAsync(ct);
+        //    await _transaction.DisposeAsync();
+        //    _transaction = null;
+        //}
     }
 }

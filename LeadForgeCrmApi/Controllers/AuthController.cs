@@ -1,5 +1,8 @@
-﻿using LeadForgeCrm.Api.Dtos.Requests;
+﻿using LeadForgeCrm.Api.Common;
+using LeadForgeCrm.Api.Dtos.Requests;
 using LeadForgeCrm.Application.Commands;
+using LeadForgeCrm.Application.Dtos.Requests;
+using LeadForgeCrm.Application.Dtos.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +34,60 @@ namespace LeadForgeCrm.Api.Controllers
             return Ok(result);
         }
 
+        [HttpPost("Signin")]
+        public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
+        {
+           var command = new SigninCommand(
+                request.Email,
+                request.Password
+                );
 
+            var result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = result.Error,
+                    Data = null
+                });
+            }
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7)  //match the tokens lifetime
+            };
+            Response.Cookies.Append("refreshToken", result.Data!.RefreshToken, cookieOptions);
+
+
+            return Ok(new ApiResponse<SignInResponeDto>
+            {
+                Success = true,
+                Message = "Sign in successful",
+                Data = result.Data
+            });
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = result.Error,
+                    Data = null
+                });
+            }
+            return Ok(result);
+        }
 
     }
 }

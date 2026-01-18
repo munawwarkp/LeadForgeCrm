@@ -21,7 +21,17 @@ namespace LeadForgeCrm.Infrastructure.Repositories
         public async Task<User?> GetEmailAsync(string email)
         {
             return await _context.Users
-                    .FirstOrDefaultAsync(u => u.Email == email);
+               .IgnoreQueryFilters()
+               .Include(u => u.Role)
+               .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _context.Users
+                .IgnoreQueryFilters()
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public void Add(User user)

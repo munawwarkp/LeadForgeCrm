@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadForgeCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260110080826_InitialCreate2")]
+    [Migration("20260118050155_InitialCreate2")]
     partial class InitialCreate2
     {
         /// <inheritdoc />
@@ -24,6 +24,45 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.Auth_UserMang.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Activity", b =>
                 {
@@ -86,6 +125,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Companies");
                 });
@@ -171,6 +212,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.HasIndex("AssignedToUserId");
 
+                    b.HasIndex("TenantId");
+
                     b.ToTable("CrmTasks");
                 });
 
@@ -213,6 +256,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasIndex("LeadId");
 
                     b.HasIndex("PipelineStageId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Deals");
                 });
@@ -279,6 +324,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TenantId");
+
                     b.ToTable("PipeLines");
                 });
 
@@ -316,6 +363,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.HasIndex("PipelineId");
 
+                    b.HasIndex("TenantId");
+
                     b.ToTable("PipelineStages");
                 });
 
@@ -338,6 +387,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Roles");
                 });
@@ -495,11 +546,36 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.Auth_UserMang.RefreshToken", b =>
+                {
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("LeadForgeCrm.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Activity", b =>
                 {
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Lead", "Lead")
                         .WithMany("Activities")
                         .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -511,7 +587,20 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.Navigation("Lead");
 
+                    b.Navigation("Tenant");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Company", b =>
+                {
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Contact", b =>
@@ -528,9 +617,17 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Company");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.CrmTask", b =>
@@ -541,7 +638,15 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("AssignedToUser");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Deal", b =>
@@ -558,9 +663,17 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Lead");
 
                     b.Navigation("PipelineStage");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Lead", b =>
@@ -577,9 +690,28 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("AssignedTo");
 
                     b.Navigation("Contact");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.PipeLine", b =>
+                {
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.PipelineStage", b =>
@@ -590,7 +722,26 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Pipeline");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.Role", b =>
+                {
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
+                        .WithMany()
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SaasCore.Subscription", b =>
@@ -620,13 +771,15 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", null)
+                    b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
                         .WithMany("Users")
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Company", b =>

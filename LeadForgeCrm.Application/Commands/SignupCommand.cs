@@ -38,7 +38,7 @@ namespace LeadForgeCrm.Application.Commands
     {
         public async Task<UserDetailsDto> Handle(SignupCommand request, CancellationToken cancellationToken)
         {
-            await unitOfWork.BeginTransactionAsync(cancellationToken);
+            //await unitOfWork.BeginTransactionAsync(cancellationToken);
 
             try
             {
@@ -111,7 +111,7 @@ namespace LeadForgeCrm.Application.Commands
                 user.PasswordHash = passwordHasher.HashPassword(user, request.Password);
                 userRepository.Add(user);
 
-                await unitOfWork.CommitAsync(cancellationToken);
+                await unitOfWork.SaveChangesAsync(cancellationToken);
 
                 return new UserDetailsDto
                 {
@@ -124,7 +124,6 @@ namespace LeadForgeCrm.Application.Commands
             }
             catch(Exception ex)
             {
-                await unitOfWork.RollbackAsync(cancellationToken);
                 logger.LogError(ex, "Error during signup process");
                 throw;
             }
