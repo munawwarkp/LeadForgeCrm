@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadForgeCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260118050155_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20260123173854_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -273,13 +273,25 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Property<int>("AssignedToId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ContactId")
+                    b.Property<int?>("ContactId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LeadSource")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -686,9 +698,7 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Contact", "Contact")
                         .WithMany("Leads")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ContactId");
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
                         .WithMany()

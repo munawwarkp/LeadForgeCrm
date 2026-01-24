@@ -12,6 +12,7 @@ namespace LeadForgeCrm.Domain.Interfaces
         Task<User?> GetEmailAsync(string email);
         Task<User?> GetByIdAsync(int id);
         void Add(User user);
+        Task<bool> IsExistUser(int AssignedToId);
 
     }
 }

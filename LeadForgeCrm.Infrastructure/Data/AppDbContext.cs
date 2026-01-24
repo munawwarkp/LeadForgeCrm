@@ -32,7 +32,7 @@ namespace LeadForgeCrm.Infrastructure.Data
             _tenantProvider = null; // no tenant at design time
         }
 
-        public int? CurrentTenantId => _tenantProvider?.TenantId;
+        public int? CurrentTenantId => _tenantProvider.TenantId;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -163,12 +163,6 @@ namespace LeadForgeCrm.Infrastructure.Data
 
             modelBuilder.Entity<Lead>(entity =>
             {
-                // Contact relationship
-                entity.HasOne(l => l.Contact)
-                      .WithMany(c => c.Leads)
-                      .HasForeignKey(l => l.ContactId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
                 // AssignedTo relationship
                 entity.HasOne(l => l.AssignedTo)
                       .WithMany() // or .WithMany(u => u.Leads) if User has a Leads collection

@@ -41,5 +41,12 @@ namespace LeadForgeCrm.Infrastructure.Repositories
             //move SaveChangesAsync to out of repositories-for unit of work pattern, so here repo, just track, no save
             //await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsExistUser(int AssignedToId)
+        {
+            return await _context.Users.AnyAsync(u =>
+                u.Id == AssignedToId
+            );
+        }
     }
 }

@@ -73,13 +73,28 @@ namespace LeadForgeCrm.Api.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
+        public async Task<IActionResult> Refresh()
         {
+
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Unauthorized(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Refresh token is missing.",
+                    Data = null
+                });
+            }
+
+            var command = new RefreshTokenCommand(refreshToken);
+            
             var result = await _mediator.Send(command);
 
             if (!result.Success)
             {
-                return BadRequest(new ApiResponse<object>
+                return Unauthorized(new ApiResponse<object>
                 {
                     Success = false,
                     Message = result.Error,

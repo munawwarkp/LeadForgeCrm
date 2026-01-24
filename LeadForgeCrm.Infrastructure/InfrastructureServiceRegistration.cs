@@ -56,8 +56,9 @@ namespace LeadForgeCrm.Infrastructure
                    };
                });
 
-
+            services.AddHttpContextAccessor();
             services.AddScoped<ITenantProvider, TenantProvider>();
+            services.AddScoped<IUserProvider, UserProvider>();
 
             services.AddScoped<ITenantRepository, TenantRepository>();
             services.AddScoped<IUserRepository, UserRepository>();  
@@ -65,6 +66,7 @@ namespace LeadForgeCrm.Infrastructure
             services.AddScoped<IplanRepository, PlanRepository>();
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRespository>();
+            services.AddScoped<ILeadRepository, LeadRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

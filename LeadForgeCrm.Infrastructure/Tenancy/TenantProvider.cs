@@ -10,13 +10,16 @@ namespace LeadForgeCrm.Infrastructure.Tenancy
 {
     public class TenantProvider : ITenantProvider
     {
-        public int TenantId { get; }
+        private readonly IHttpContextAccessor _accessor;
+
 
         public TenantProvider(IHttpContextAccessor accessor)
         {
-            var claim = accessor.HttpContext?.User?.FindFirst("TenantId");
-
-            TenantId = claim != null ?int.Parse(claim.Value) : 0;
+            _accessor = accessor;
         }
+        public int TenantId =>
+           int.Parse( _accessor.HttpContext?.Items["TenantId"]?.ToString() 
+                ?? throw new Exception("Tenant not resolved"));
+
     }
 }
