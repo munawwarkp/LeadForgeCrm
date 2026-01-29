@@ -31,5 +31,43 @@ namespace LeadForgeCrm.Infrastructure.Repositories
                     ct
                     );
         }
+
+
+        public async Task<Lead> GetByIdAsync(int leadId, CancellationToken ct)
+        {
+           return await _context.Leads.FirstOrDefaultAsync(l => l.Id == leadId, ct);
+        }
+        public async Task UpdateAsync(Lead lead)
+        {
+            _context.Leads.Update(lead);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _context.Leads.
+                Where(l => l.Id == id).
+                ExecuteDeleteAsync();
+        }
+
+        public async Task<Lead?> GetLeadByIdAsync(int leadId, CancellationToken ct)
+        {
+            return await _context.Leads.
+                AsNoTracking().
+                FirstOrDefaultAsync(l => l.Id == leadId, ct);
+               
+        }
+
+        public async Task<IEnumerable<Lead>> GetLeadsAsync(
+            int pageNumber,
+            int pageSize,
+            CancellationToken ct)
+        {
+            return await _context.Leads.
+                AsNoTracking().
+                OrderByDescending(l => l.CreatedAt).
+                Skip((pageNumber - 1)*pageSize).
+                Skip(pageSize).
+                ToListAsync();
+        }
     }
 }

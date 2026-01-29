@@ -1,4 +1,5 @@
 
+using System.Text.Json.Serialization;
 using LeadForgeCrm.Api.Middlewares;
 using LeadForgeCrm.Application;
 using LeadForgeCrm.Infrastructure;
@@ -25,7 +26,13 @@ namespace LeadForgeCrmApi
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter());
+                });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>

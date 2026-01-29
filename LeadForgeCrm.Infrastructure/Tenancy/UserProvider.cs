@@ -26,7 +26,7 @@ namespace LeadForgeCrm.Infrastructure.Tenancy
             get
             {
                 var userIdClaim = _httpContextAccessor.HttpContext?.User?
-                .FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+                .FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 Console.WriteLine("user id from claim : "+userIdClaim);
 

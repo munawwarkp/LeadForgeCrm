@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LeadForgeCrm.Domain.Constants;
 using LeadForgeCrm.Domain.Entities.Base;
+using LeadForgeCrm.Domain.Enums;
 
 namespace LeadForgeCrm.Domain.Entities.CrmCore
 {
@@ -29,8 +30,26 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public ICollection<Deal> Deals { get; set; } = new List<Deal>();
         public ICollection<Activity> Activities { get; set; } = new List<Activity>();
 
-        [NotMapped]
-        public bool IsConverted => Status == LeadStatuses.Converted;
+
+        private static readonly Dictionary<LeadStatus, LeadStatus[]> AllowedTransitions = new()
+        {
+            [LeadStatus.New] = new[] { LeadStatus.Contacted },
+            [LeadStatus.Contacted] = new[] { LeadStatus.Qualified, LeadStatus.Unqualified },
+            [LeadStatus.Qualified] = new[] { LeadStatus.Converted }
+        };
+
+
+        public void UpdateStatus(LeadStatus newStatus)
+        {
+            var current = Enum.Parse<LeadStatus>(Status);
+
+            if (!AllowedTransitions[current].Contains(newStatus))
+            {
+                throw new Exception("invalid status transition");
+            }
+
+            Status = newStatus.ToString();
+        }
 
     }
 }

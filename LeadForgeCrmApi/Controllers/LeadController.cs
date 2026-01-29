@@ -1,4 +1,6 @@
-﻿using LeadForgeCrm.Application.Commands;
+﻿using System.Data;
+using LeadForgeCrm.Api.Contracts;
+using LeadForgeCrm.Application.Commands;
 using LeadForgeCrm.Application.Dtos.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -29,6 +31,21 @@ namespace LeadForgeCrm.Api.Controllers
                 );
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [HttpPatch("{leadId:int}/status")]
+        public async Task<IActionResult> UpdateLeadStatus(int leadId,UpdateLeadStatusRequest request)
+        {
+            var res = await _mediator.Send(new UpdateLeadStatusCommand(leadId, request.Status));
+            return Ok(res);
+        }
+
+        [HttpDelete("{leadId:int}")]
+        public async Task<IActionResult> DeleteLead(int leadId)
+        {
+            var command = new DeleteLeadCommand(leadId);
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

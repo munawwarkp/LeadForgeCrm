@@ -16,8 +16,4 @@
     <ProjectReference Include="..\LeadForgeCrm.Domain\LeadForgeCrm.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
 </Project>
