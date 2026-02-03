@@ -1,7 +1,9 @@
 ﻿using System.Data;
+using System.Formats.Asn1;
 using LeadForgeCrm.Api.Contracts;
 using LeadForgeCrm.Application.Commands;
 using LeadForgeCrm.Application.Dtos.Requests;
+using LeadForgeCrm.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -46,6 +48,23 @@ namespace LeadForgeCrm.Api.Controllers
             var command = new DeleteLeadCommand(leadId);
             await _mediator.Send(command);
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLeads([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
+        {
+            var query = new GetLeadsQuery(pageNumber, pageSize);
+
+            var leads = await _mediator.Send(query);
+            return Ok(leads);
+        }
+
+        [HttpGet("{leadId:int}")]
+        public async Task<IActionResult> GetLeadById(int leadId)
+        {
+            var query = new GetLeadByIdQuery(leadId);
+            var lead = await _mediator.Send(query);
+            return Ok(lead);
         }
     }
 }

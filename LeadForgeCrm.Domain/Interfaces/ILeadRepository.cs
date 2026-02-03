@@ -17,7 +17,7 @@ namespace LeadForgeCrm.Domain.Interfaces
         Task DeleteAsync(int id);
 
 
-        Task<Lead?> GetLeadById(int leadId);
-        Task<IEnumerable<Lead>> GetLeads();
+        Task<Lead?> GetLeadByIdAsync(int leadId, CancellationToken ct);
+        Task<IReadOnlyList<Lead>> GetLeadsAsync(int pageNumber, int pageSize, CancellationToken ct);
     }
 }

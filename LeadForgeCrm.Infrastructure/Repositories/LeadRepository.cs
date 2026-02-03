@@ -57,7 +57,7 @@ namespace LeadForgeCrm.Infrastructure.Repositories
                
         }
 
-        public async Task<IEnumerable<Lead>> GetLeadsAsync(
+        public async Task<IReadOnlyList<Lead>> GetLeadsAsync(
             int pageNumber,
             int pageSize,
             CancellationToken ct)
@@ -66,7 +66,7 @@ namespace LeadForgeCrm.Infrastructure.Repositories
                 AsNoTracking().
                 OrderByDescending(l => l.CreatedAt).
                 Skip((pageNumber - 1)*pageSize).
-                Skip(pageSize).
+                Take(pageSize).
                 ToListAsync();
         }
     }

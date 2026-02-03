@@ -11,6 +11,7 @@ using LeadForgeCrm.Domain.Entities.Auth_UserMang;
 using LeadForgeCrm.Domain.Entities.Base;
 using LeadForgeCrm.Domain.Entities.CrmCore;
 using LeadForgeCrm.Domain.Entities.SaasCore;
+using LeadForgeCrm.Domain.Entities.SysData;
 using LeadForgeCrm.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -246,6 +247,10 @@ namespace LeadForgeCrm.Infrastructure.Data
 
         public DbSet<PipeLine> PipeLines { get; set; }
         public DbSet<PipelineStage> PipelineStages { get; set; }
+
+
+        public DbSet<PipelineTemplates> PipelineTemplates { get; set; }
+        public DbSet<PipelineStageTemplate> PipelineStageTemplates { get; set; }
 
     }
 }

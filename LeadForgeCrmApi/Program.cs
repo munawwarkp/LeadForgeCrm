@@ -1,5 +1,6 @@
 
 using System.Text.Json.Serialization;
+using LeadForgeCrm.Api.ExceptionHandler;
 using LeadForgeCrm.Api.Middlewares;
 using LeadForgeCrm.Application;
 using LeadForgeCrm.Infrastructure;
@@ -71,6 +72,9 @@ namespace LeadForgeCrmApi
                }
             );
 
+            builder.Services.AddProblemDetails();
+            builder.Services.AddExceptionHandler<TenantNotResolvedExceptionHandler>();
+
             var app = builder.Build();
 
 
@@ -87,6 +91,8 @@ namespace LeadForgeCrmApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
 

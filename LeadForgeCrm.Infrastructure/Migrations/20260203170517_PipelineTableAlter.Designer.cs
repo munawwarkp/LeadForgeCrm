@@ -4,6 +4,7 @@ using LeadForgeCrm.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadForgeCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260203170517_PipelineTableAlter")]
+    partial class PipelineTableAlter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -510,52 +513,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.ToTable("Tenants");
                 });
 
-            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SysData.PipelineStageTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TemplateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TemplateId");
-
-                    b.ToTable("PipelineStageTemplates");
-                });
-
-            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SysData.PipelineTemplates", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Industry")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PipelineTemplates");
-                });
-
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -812,17 +769,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SysData.PipelineStageTemplate", b =>
-                {
-                    b.HasOne("LeadForgeCrm.Domain.Entities.SysData.PipelineTemplates", "Template")
-                        .WithMany("Stages")
-                        .HasForeignKey("TemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Template");
-                });
-
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.User", b =>
                 {
                     b.HasOne("LeadForgeCrm.Domain.Entities.Role", "Role")
@@ -874,11 +820,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Navigation("Subscription");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("LeadForgeCrm.Domain.Entities.SysData.PipelineTemplates", b =>
-                {
-                    b.Navigation("Stages");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.User", b =>
