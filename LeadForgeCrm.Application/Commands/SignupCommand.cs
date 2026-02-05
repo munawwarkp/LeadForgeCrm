@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LeadForgeCrm.Api.Dtos.Requests;
 using LeadForgeCrm.Application.Dtos.Responses;
 using LeadForgeCrm.Application.Interfaces;
+using LeadForgeCrm.Application.Services;
 using LeadForgeCrm.Domain.Entities;
 using LeadForgeCrm.Domain.Entities.SaasCore;
 using LeadForgeCrm.Domain.Interfaces;
@@ -32,7 +33,8 @@ namespace LeadForgeCrm.Application.Commands
         IplanRepository planRepository,
         ISubscriptionRepository subscriptionRepository,
         IUnitOfWork unitOfWork,
-        ILogger<SignupCommandHandler> logger
+        ILogger<SignupCommandHandler> logger,
+        ITenantPipelineInitializer tenantPipelineInitializer
         )
         : IRequestHandler<SignupCommand, UserDetailsDto>
     {
@@ -53,6 +55,12 @@ namespace LeadForgeCrm.Application.Commands
 
                 tenant = tenantRepository.Add(tenant);
 
+
+                //craate default pipeline
+
+                await tenantPipelineInitializer.CreateDefaultPipelineAsync(tenant, cancellationToken);
+
+
                 //create subscription
                 var defaultPlan = await planRepository.GetDefaultFreePlanAsync();
 
@@ -67,6 +75,7 @@ namespace LeadForgeCrm.Application.Commands
 
 
                  subscriptionRepository.AddSubscription(subscription);
+
 
 
                 //seed roles and keep referrnces

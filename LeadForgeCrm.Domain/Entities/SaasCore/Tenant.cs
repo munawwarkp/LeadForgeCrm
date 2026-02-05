@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeadForgeCrm.Domain.Entities.Base;
+using LeadForgeCrm.Domain.Entities.CrmCore;
 
 namespace LeadForgeCrm.Domain.Entities.SaasCore
 {
@@ -21,5 +22,7 @@ namespace LeadForgeCrm.Domain.Entities.SaasCore
         public Subscription? Subscription { get; set; } = null!; // nullable if a tenant may exist without subscription
 
         public ICollection<User> Users { get; set; }=new List<User>();
+        public ICollection<PipeLine> Pipelines { get; set; } = new List<PipeLine>();
+
     }
 }

@@ -41,7 +41,6 @@ namespace LeadForgeCrm.Application.Commands
                 if(duplicate)
                     return Result<int>.Fail("Lead with the same email already exists.");
 
-              
                 //Create lead
                 var lead = new Lead
                 {                   
@@ -51,8 +50,7 @@ namespace LeadForgeCrm.Application.Commands
                     LeadSource = request.LeadSource,
                     Status = LeadStatuses.New,
                     TenantId = tenantId,
-                    CreatedAt = DateTime.UtcNow
-                    
+                    CreatedAt = DateTime.UtcNow                    
                 };
 
                 // if logged in user created it, assign automatically

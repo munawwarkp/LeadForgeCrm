@@ -32,6 +32,11 @@ namespace LeadForgeCrm.Application.Commands
 
                 lead.UpdateStatus(request.Status);
 
+                if(lead.Status == LeadStatus.Converted.ToString())
+                {
+                   //trigger conversion
+                }
+
                 await leadRepository.UpdateAsync(lead);
                 await unitOfWork.SaveChangesAsync();
 

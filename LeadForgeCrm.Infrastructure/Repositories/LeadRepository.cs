@@ -39,7 +39,7 @@ namespace LeadForgeCrm.Infrastructure.Repositories
         }
         public async Task UpdateAsync(Lead lead)
         {
-            _context.Leads.Update(lead);
+             _context.Leads.Update(lead);          
         }
 
         public async Task DeleteAsync(int id)

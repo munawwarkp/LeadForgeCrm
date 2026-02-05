@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeadForgeCrm.Application.Interfaces;
+using LeadForgeCrm.Application.Services;
 using LeadForgeCrm.Domain.Interfaces;
 using LeadForgeCrm.Infrastructure.Data;
 using LeadForgeCrm.Infrastructure.Options;
@@ -67,6 +68,8 @@ namespace LeadForgeCrm.Infrastructure
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRespository>();
             services.AddScoped<ILeadRepository, LeadRepository>();
+            services.AddScoped<IPipelineRepository, PipelineRepository>();
+            services.AddScoped<IPipelineTemplateRepository, PipelineTemplateRepo>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -74,6 +77,7 @@ namespace LeadForgeCrm.Infrastructure
 
             services.AddScoped<PlanSeeder>();
             services.AddHostedService<PlanSeederHostedService>();
+            services.AddScoped<ITenantPipelineInitializer, TenantPipelineInitializer>();
 
             return services;    
         }
