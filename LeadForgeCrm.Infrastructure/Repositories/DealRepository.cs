@@ -6,29 +6,29 @@ using System.Threading.Tasks;
 using LeadForgeCrm.Domain.Entities.CrmCore;
 using LeadForgeCrm.Domain.Interfaces;
 using LeadForgeCrm.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace LeadForgeCrm.Infrastructure.Repositories
 {
-    public class PipelineRepository: IPipelineRepository
+    public class DealRepository : IDealRepository
     {
         private readonly AppDbContext _context;
-        public PipelineRepository(AppDbContext context)
+        public DealRepository(AppDbContext context)
         {
             _context = context;
         }
-
-        public async Task AddAsync(PipeLine pipeline)
+        public async Task AddAsync(Deal deal)
         {
-            await _context.PipeLines.AddAsync(pipeline);
-            
+            await _context.Deals.AddAsync(deal);
         }
 
-
-        public async Task<PipeLine> GetDefaultPipelineAsync()
+        public async Task<Deal?> GetByIdAsync(int id, CancellationToken ct)
         {
-            return await _context.PipeLines.FirstOrDefaultAsync(p => p.IsDefault);
+            return await _context.Deals.FindAsync(id);
         }
 
+        public async Task UpdateAsync(Deal deal)
+        {
+            _context.Deals.Update(deal);
+        }
     }
 }

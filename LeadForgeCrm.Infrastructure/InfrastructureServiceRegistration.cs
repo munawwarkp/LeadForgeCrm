@@ -70,6 +70,10 @@ namespace LeadForgeCrm.Infrastructure
             services.AddScoped<ILeadRepository, LeadRepository>();
             services.AddScoped<IPipelineRepository, PipelineRepository>();
             services.AddScoped<IPipelineTemplateRepository, PipelineTemplateRepo>();
+            services.AddScoped<IPipelineStageRepository, PipelineStageRepository>();
+            services.AddScoped<IDealRepository, DealRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

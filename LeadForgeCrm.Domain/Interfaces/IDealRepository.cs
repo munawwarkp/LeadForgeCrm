@@ -7,9 +7,10 @@ using LeadForgeCrm.Domain.Entities.CrmCore;
 
 namespace LeadForgeCrm.Domain.Interfaces
 {
-    public interface IPipelineRepository
+    public interface IDealRepository
     {
-        Task AddAsync(PipeLine pipeline);
-        Task<PipeLine> GetDefaultPipelineAsync();
+        Task AddAsync(Deal deal);
+        Task<Deal?> GetByIdAsync(int id, CancellationToken ct);
+        Task UpdateAsync(Deal deal);
     }
 }

@@ -81,6 +81,13 @@ namespace LeadForgeCrm.Infrastructure.Data
                 .HasQueryFilter(rt =>
                     !CurrentTenantId.HasValue || rt.TenantId == CurrentTenantId);
 
+            modelBuilder.Entity<PipelineStage>()
+                .HasQueryFilter(ps =>
+                   !CurrentTenantId.HasValue || ps.TenantId == CurrentTenantId);
+
+            modelBuilder.Entity<PipeLine>()
+                .HasQueryFilter(p =>
+                    !CurrentTenantId.HasValue || p.TenantId == CurrentTenantId);
 
             //tenant configuration
 
@@ -150,7 +157,7 @@ namespace LeadForgeCrm.Infrastructure.Data
                 entity.HasOne(c => c.Company)
                       .WithMany(comp => comp.Contacts)
                       .HasForeignKey(c => c.CompanyId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                      .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(c => c.Tenant)
                      .WithMany()
@@ -159,6 +166,11 @@ namespace LeadForgeCrm.Infrastructure.Data
 
                 // Index for multi-tenancy
                 entity.HasIndex(c => c.TenantId);
+
+                entity.HasIndex(c => new { c.TenantId, c.Email })
+                   .IsUnique()
+                   .HasFilter("[Email] IS NOT NULL");
+
             });
 
 
@@ -179,6 +191,16 @@ namespace LeadForgeCrm.Infrastructure.Data
                 entity.Property(d => d.Amount)
                       .HasPrecision(18,2)
                       .IsRequired();
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(c => c.Deals)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.Restrict); 
+
+                entity.HasOne(d => d.Contact)
+                    .WithMany(c => c.Deals)
+                    .HasForeignKey(d => d.ContactId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Activity>(entity =>

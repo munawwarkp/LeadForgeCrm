@@ -12,5 +12,7 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public string Name { get; set; } = null!;
 
         public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
+        public ICollection<Deal> Deals { get; set; } = new List<Deal>();
+
     }
 }

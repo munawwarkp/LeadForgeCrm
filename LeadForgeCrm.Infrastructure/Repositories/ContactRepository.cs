@@ -10,25 +10,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LeadForgeCrm.Infrastructure.Repositories
 {
-    public class PipelineRepository: IPipelineRepository
+    public class ContactRepository : IContactRepository
     {
         private readonly AppDbContext _context;
-        public PipelineRepository(AppDbContext context)
+        public ContactRepository(AppDbContext context)
         {
             _context = context;
         }
 
-        public async Task AddAsync(PipeLine pipeline)
+        public async Task AddAsync(Contact contact,CancellationToken ct)
         {
-            await _context.PipeLines.AddAsync(pipeline);
+            await _context.Contacts.AddAsync(contact,ct);
             
         }
 
-
-        public async Task<PipeLine> GetDefaultPipelineAsync()
+        public async Task<bool> ExistAsync(string email)
         {
-            return await _context.PipeLines.FirstOrDefaultAsync(p => p.IsDefault);
+            return await _context.Contacts.AnyAsync(c => c.Email == email);
         }
-
     }
 }

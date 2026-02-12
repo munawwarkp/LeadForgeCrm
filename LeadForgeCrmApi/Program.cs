@@ -74,6 +74,7 @@ namespace LeadForgeCrmApi
 
             builder.Services.AddProblemDetails();
             builder.Services.AddExceptionHandler<TenantNotResolvedExceptionHandler>();
+            builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 
             var app = builder.Build();
 

@@ -17,13 +17,15 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 
         //public string Company { get; set; }
 
-        public int CompanyId { get; set; }
-        public Company Company { get; set; } = null!;
+        public int? CompanyId { get; set; }
+        public Company? Company { get; set; } = null!;
 
         public int OwnerId { get; set; }
         public User Owner { get; set; } = null!;
 
 
         public ICollection<Lead> Leads { get; set; } = new List<Lead>();
+        public ICollection<Deal> Deals { get; set; } = new List<Deal>();
+
     }
 }

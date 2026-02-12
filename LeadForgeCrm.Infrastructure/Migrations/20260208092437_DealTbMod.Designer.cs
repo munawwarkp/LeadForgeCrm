@@ -4,6 +4,7 @@ using LeadForgeCrm.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadForgeCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260208092437_DealTbMod")]
+    partial class DealTbMod
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,7 +139,7 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -226,12 +229,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ContactId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -261,10 +258,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ContactId");
 
                     b.HasIndex("LeadId");
 
@@ -676,7 +669,8 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Company", "Company")
                         .WithMany("Contacts")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.User", "Owner")
                         .WithMany()
@@ -718,16 +712,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Deal", b =>
                 {
-                    b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Company", "Company")
-                        .WithMany("Deals")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Contact", "Contact")
-                        .WithMany("Deals")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Lead", "Lead")
                         .WithMany("Deals")
                         .HasForeignKey("LeadId")
@@ -745,10 +729,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Contact");
 
                     b.Navigation("Lead");
 
@@ -874,14 +854,10 @@ namespace LeadForgeCrm.Infrastructure.Migrations
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Company", b =>
                 {
                     b.Navigation("Contacts");
-
-                    b.Navigation("Deals");
                 });
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.Contact", b =>
                 {
-                    b.Navigation("Deals");
-
                     b.Navigation("Leads");
                 });
 

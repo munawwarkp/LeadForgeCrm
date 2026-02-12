@@ -14,11 +14,13 @@ namespace LeadForgeCrm.Application.Services
     {
         private readonly IPipelineTemplateRepository _pipelineTemplateRepo;
         private readonly IPipelineRepository _pipelineRepository;
+        private readonly IPipelineStageRepository _pipelineStageRepository;
         private readonly ILogger<TenantPipelineInitializer> _logger;
-        public TenantPipelineInitializer(IPipelineRepository pipelineRepository, IPipelineTemplateRepository pipelineTemplateRepository,ILogger<TenantPipelineInitializer> logger)
+        public TenantPipelineInitializer(IPipelineRepository pipelineRepository, IPipelineTemplateRepository pipelineTemplateRepository,ILogger<TenantPipelineInitializer> logger, IPipelineStageRepository pipelineStage)
         {
             _pipelineRepository = pipelineRepository;
             _pipelineTemplateRepo = pipelineTemplateRepository;
+            _pipelineStageRepository = pipelineStage;
             _logger = logger;   
 
         }
@@ -57,5 +59,20 @@ namespace LeadForgeCrm.Application.Services
                 throw new Exception("Default pipeline template not found");
         }
 
+        //public async Task UpdateAsync()
+        //{
+        //    //get pipeline of the user
+        //    //list of pipeline stages contains in pipelineStages
+
+        //    var pipelineStages =  await _pipelineStageRepository.GetUserPipeline();
+            
+        //    if(pipelineStages == null)
+        //        throw new Exception("Pipeline not found");
+
+        //    //order - 1 - from lead - converted
+        //    pipelineStages.ChangeOrder(1);
+
+        //    await _pipelineStageRepository.UpdateStatus(pipelineStages);
+        //}
     }
 }
