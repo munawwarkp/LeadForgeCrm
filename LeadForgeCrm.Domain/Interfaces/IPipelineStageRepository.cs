@@ -14,5 +14,6 @@ namespace LeadForgeCrm.Domain.Interfaces
         Task<PipelineStage?> GetNextStageAsync(
             int pipelineId,
             int currentStageOrder);
+        Task<PipelineStage?> GetByIdAsync(int id, CancellationToken ct);
     }
 }

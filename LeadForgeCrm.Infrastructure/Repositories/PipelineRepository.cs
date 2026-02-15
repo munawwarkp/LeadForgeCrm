@@ -24,11 +24,9 @@ namespace LeadForgeCrm.Infrastructure.Repositories
             
         }
 
-
         public async Task<PipeLine> GetDefaultPipelineAsync()
         {
             return await _context.PipeLines.FirstOrDefaultAsync(p => p.IsDefault);
         }
-
     }
 }

@@ -4,6 +4,7 @@ using LeadForgeCrm.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadForgeCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260215071745_deal_ent_leadId_nullable")]
+    partial class deal_ent_leadId_nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,9 +251,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ExpectedCloseDate")
                         .HasColumnType("datetime2");
 
@@ -286,8 +286,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasIndex("ContactId");
 
                     b.HasIndex("LeadId");
-
-                    b.HasIndex("PipelineId");
 
                     b.HasIndex("PipelineStageId");
 
@@ -759,16 +757,10 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .WithMany("Deals")
                         .HasForeignKey("LeadId");
 
-                    b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.PipeLine", "PipeLine")
-                        .WithMany("Deals")
-                        .HasForeignKey("PipelineId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.PipelineStage", "PipelineStage")
                         .WithMany("Deals")
                         .HasForeignKey("PipelineStageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
@@ -782,8 +774,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Navigation("Contact");
 
                     b.Navigation("Lead");
-
-                    b.Navigation("PipeLine");
 
                     b.Navigation("PipelineStage");
 
@@ -927,8 +917,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.PipeLine", b =>
                 {
-                    b.Navigation("Deals");
-
                     b.Navigation("Stages");
                 });
 

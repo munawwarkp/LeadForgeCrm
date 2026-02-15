@@ -40,9 +40,14 @@ namespace LeadForgeCrm.Infrastructure.Repositories
             return await _context.PipelineStages
                 .Where(s =>
                     s.PipelineId == pipelineId && 
-                    s.Order > currentStageOrder)
+                    s.Order == currentStageOrder)
                 .OrderBy(s => s.Order)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<PipelineStage?> GetByIdAsync(int id, CancellationToken ct)
+        {
+            return await _context.PipelineStages.FindAsync(id, ct);
         }
     }
 }

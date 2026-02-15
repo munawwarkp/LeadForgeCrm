@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LeadForgeCrm.Domain.Entities.CrmCore;
 using LeadForgeCrm.Domain.Interfaces;
 using LeadForgeCrm.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace LeadForgeCrm.Infrastructure.Repositories
 {
@@ -30,5 +31,6 @@ namespace LeadForgeCrm.Infrastructure.Repositories
         {
             _context.Deals.Update(deal);
         }
+
     }
 }

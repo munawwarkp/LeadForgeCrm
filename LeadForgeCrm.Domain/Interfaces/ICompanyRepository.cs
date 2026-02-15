@@ -11,5 +11,7 @@ namespace LeadForgeCrm.Domain.Interfaces
     {
         Task AddAsync(Company company, CancellationToken ct);
         Task<bool> ExistsAsync(int companyId, CancellationToken ct);
+
+        Task<bool> ExistsByNameAsync(string companyName, CancellationToken ct);
     }
 }

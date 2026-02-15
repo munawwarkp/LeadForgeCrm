@@ -58,6 +58,7 @@ namespace LeadForgeCrm.Application.Commands
                         Title = lead.Name,
                         Amount = 0,
                         Order = firstStage.Order,
+                        Probability = firstStage.DeafultProbability,
                         CreatedAt = DateTime.UtcNow,    
                        
                     };

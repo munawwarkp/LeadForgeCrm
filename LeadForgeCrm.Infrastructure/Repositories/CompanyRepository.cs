@@ -27,5 +27,10 @@ namespace LeadForgeCrm.Infrastructure.Repositories
         {
             return await _context.Companies.AnyAsync(c => c.Id ==companyId, ct);
         }
+
+        public async Task<bool> ExistsByNameAsync(string companyName, CancellationToken ct)
+        {
+            return await _context.Companies.AnyAsync(c => c.Name == companyName, ct);
+        }
     }
 }

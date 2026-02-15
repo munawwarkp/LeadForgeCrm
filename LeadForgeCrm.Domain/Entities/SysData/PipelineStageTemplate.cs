@@ -12,6 +12,7 @@ namespace LeadForgeCrm.Domain.Entities.SysData
         public int TemplateId {  get; set; }
         public string Name {  get; set; } = null!;
         public int Order { get; set; }
+        public int DefaultProbability { get; set; } 
 
         public PipelineTemplates Template { get; set; } = null!;
     }

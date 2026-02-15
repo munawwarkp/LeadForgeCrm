@@ -4,6 +4,7 @@ using LeadForgeCrm.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LeadForgeCrm.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260213171547_AddresfieldAddedIntoCompanyEntity")]
+    partial class AddresfieldAddedIntoCompanyEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,13 +251,10 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ExpectedCloseDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LeadId")
+                    b.Property<int>("LeadId")
                         .HasColumnType("int");
 
                     b.Property<int>("Order")
@@ -264,9 +264,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PipelineStageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Probability")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -286,8 +283,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.HasIndex("ContactId");
 
                     b.HasIndex("LeadId");
-
-                    b.HasIndex("PipelineId");
 
                     b.HasIndex("PipelineStageId");
 
@@ -385,9 +380,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("DeafultProbability")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -557,9 +549,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DefaultProbability")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -757,18 +746,14 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.Lead", "Lead")
                         .WithMany("Deals")
-                        .HasForeignKey("LeadId");
-
-                    b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.PipeLine", "PipeLine")
-                        .WithMany("Deals")
-                        .HasForeignKey("PipelineId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.CrmCore.PipelineStage", "PipelineStage")
                         .WithMany("Deals")
                         .HasForeignKey("PipelineStageId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LeadForgeCrm.Domain.Entities.SaasCore.Tenant", "Tenant")
@@ -782,8 +767,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
                     b.Navigation("Contact");
 
                     b.Navigation("Lead");
-
-                    b.Navigation("PipeLine");
 
                     b.Navigation("PipelineStage");
 
@@ -927,8 +910,6 @@ namespace LeadForgeCrm.Infrastructure.Migrations
 
             modelBuilder.Entity("LeadForgeCrm.Domain.Entities.CrmCore.PipeLine", b =>
                 {
-                    b.Navigation("Deals");
-
                     b.Navigation("Stages");
                 });
 

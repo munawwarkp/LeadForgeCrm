@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeadForgeCrm.Application.Dtos.Responses
+namespace LeadForgeCrm.Application.Dtos.Requests
 {
-    public record CompanyResponse(
-        int Id,
-        string CompanyName,
+    public record CreateCompanyRequest(
+        string Name,
+        string? Phone,
         string? Address,
-        string? Phone
+        string? WebSiteUrl
         );
    
 }

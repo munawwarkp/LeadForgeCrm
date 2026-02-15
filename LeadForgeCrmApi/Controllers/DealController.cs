@@ -1,4 +1,5 @@
 ﻿using LeadForgeCrm.Application.Commands;
+using LeadForgeCrm.Application.Dtos.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,14 @@ namespace LeadForgeCrm.Api.Controllers
             var result = await _mediator.Send(command, ct);
             return Ok(result);
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateDeal(DealRequest request, CancellationToken ct)
+        {
+            var command = new CreateDealCommand(request);
+            var result = await _mediator.Send(command, ct);
+            return Ok(result);
         }
     }
 }

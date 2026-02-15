@@ -49,6 +49,7 @@ namespace LeadForgeCrm.Application.Services
                         Pipeline = pipeline,
                         Name = stageTemplate.Name,
                         Order = stageTemplate.Order,
+                        DeafultProbability = stageTemplate.DefaultProbability,
                         CreatedAt = DateTime.UtcNow
                     });
                 }

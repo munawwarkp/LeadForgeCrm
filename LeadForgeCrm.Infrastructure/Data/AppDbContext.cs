@@ -201,7 +201,23 @@ namespace LeadForgeCrm.Infrastructure.Data
                     .WithMany(c => c.Deals)
                     .HasForeignKey(d => d.ContactId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.PipeLine)
+                    .WithMany(p => p.Deals)
+                    .HasForeignKey(d => d.PipelineId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(d => d.PipelineStage)
+                    .WithMany(ps => ps.Deals)
+                    .HasForeignKey(d => d.PipelineStageId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
+
+            modelBuilder.Entity<PipelineStage>()
+                .HasOne(ps => ps.Pipeline)
+                .WithMany(p => p.Stages)
+                .HasForeignKey(ps => ps.PipelineId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Activity>(entity =>
             {
@@ -244,6 +260,8 @@ namespace LeadForgeCrm.Infrastructure.Data
                         .HasForeignKey(t => t.TenantId)
                         .OnDelete(DeleteBehavior.Restrict);
             });
+
+           
         }
 
         //dbsets (tables)

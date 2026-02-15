@@ -74,6 +74,7 @@ namespace LeadForgeCrm.Infrastructure
             services.AddScoped<IDealRepository, DealRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+        
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

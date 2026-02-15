@@ -12,6 +12,7 @@ using MediatR;
 
 namespace LeadForgeCrm.Application.Commands
 {
+    //later clean code
     public record ChangeDealStageCommand(
         int DealId,
         int Order):IRequest<Result<DealChangeResponse>>;
@@ -35,6 +36,8 @@ namespace LeadForgeCrm.Application.Commands
                 return Result<DealChangeResponse>.Fail("No next stage found for the given order");
 
             deal.ChangeStage(nextStage.Id, request.Order);
+            deal.CreatedAt = DateTime.UtcNow;
+            deal.Probability = nextStage.DeafultProbability;
 
             await dealRepository.UpdateAsync(deal);
             await unitOfWork.SaveChangesAsync(cancellationToken);

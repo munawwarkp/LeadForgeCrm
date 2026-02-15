@@ -9,7 +9,11 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 {
     public class Company:BaseTenantEntity
     {
+
         public string Name { get; set; } = null!;
+        public string? Phone { get; set; } = null!;
+        public string? Address { get; set; } = null!;
+        public string? WebSiteUrl { get; set; } = null!;
 
         public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
         public ICollection<Deal> Deals { get; set; } = new List<Deal>();

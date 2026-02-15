@@ -10,26 +10,31 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 {
     public class Deal:BaseTenantEntity
     {
-        public int LeadId { get; set; }
-        public Lead Lead { get; set; } = null!;
+        public int? LeadId { get; set; }
+        public Lead? Lead { get; set; } = null!;
 
         public int PipelineId { get; set; }
+        public PipeLine PipeLine { get; set; } = null!;
 
         public int PipelineStageId { get; set; }
         public PipelineStage PipelineStage { get; set; } = null!;
 
 
-        public int? CompanyId { get; private set; }
-        public Company? Company { get; private set; }
+        public int? CompanyId { get;  set; }
+        public Company? Company { get;  set; }
 
-        public int? ContactId { get; private set; }
-        public Contact? Contact { get; private set; }
+        public int? ContactId { get;  set; }
+        public Contact? Contact { get;  set; }
 
         public string Title { get; set; } = null!;
         //public string Stage { get; set; } = null!;
         public decimal Amount { get; set; }
-        public DateTime? ExpectedCloseDate { get; set; }
+        public int Probability { get; set; }
 
+        // Not mapped / calculated
+        public decimal ExpectedRevenue => Amount * Probability / 100m;
+        public DateTime? ExpectedCloseDate { get; set; }
+        public string? Description { get; set; } = null!;
         public int Order { get; set; }   // card order inside a stage
 
         public StageStatus Status { get; private set; }
@@ -42,11 +47,6 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 
             PipelineStageId = newStageId;
             Order = newOrder;
-        }
-
-        public void AssignCompany(int companyId)
-        {
-            CompanyId = companyId;
         }
 
     }

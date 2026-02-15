@@ -15,7 +15,8 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 
         //public bool IsClosed { get; set; }
         //public bool IsWon { get; set; }
-
+        
+        public int DeafultProbability { get; set; } 
         public StageStatus Status { get; private set; }
 
 

@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace LeadForgeCrm.Application.Dtos.Responses
 {
-    public record CompanyResponse(
-        int Id,
-        string CompanyName,
-        string? Address,
-        string? Phone
+    public record CreateDealResponse(
+        string Title,
+        decimal Amount,
+        DateTime? ClosingDate,
+        string Description
         );
-   
 }
