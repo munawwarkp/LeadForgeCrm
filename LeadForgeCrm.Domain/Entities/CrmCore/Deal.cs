@@ -38,7 +38,16 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public int Order { get; set; }   // card order inside a stage
 
         public StageStatus Status { get; private set; }
+        public ICollection<Address> Addresses { get; set; }
 
+        public bool IsDeleted { get; set; } = false;    
+        public DateTime DeletedAt { get; set; } = DateTime.MinValue;
+
+        public int? AssignedUserId { get; set; }
+        public int? CreatedByUserId { get; set; }   
+
+        public User? AssignedUser { get; set; }
+        public User? CreatedByUser { get; set; }
 
         public void ChangeStage(int newStageId, int newOrder)
         {

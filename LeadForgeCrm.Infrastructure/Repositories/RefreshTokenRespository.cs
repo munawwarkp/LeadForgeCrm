@@ -27,7 +27,7 @@ namespace LeadForgeCrm.Infrastructure.Repositories
         {
             return await _context.RefreshTokens
                 .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(rt => rt.Token == token);
+                .FirstOrDefaultAsync(rt => rt.TokenHash == token);
         }
 
         public void Update(RefreshToken token)

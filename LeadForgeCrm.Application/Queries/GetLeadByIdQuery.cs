@@ -42,7 +42,7 @@ namespace LeadForgeCrm.Application.Queries
                                 res.Phone,
                                 res.LeadSource,
                                 res.Status,
-                                res.AssignedTo?.FullName ?? "Unassigned",
+                                res.CreatedByUser?.FirstName ?? "Unassigned",
                                 res.CreatedAt
                                 ));
             }

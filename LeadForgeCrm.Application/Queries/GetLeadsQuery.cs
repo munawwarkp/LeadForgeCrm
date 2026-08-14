@@ -34,7 +34,7 @@ namespace LeadForgeCrm.Application.Queries
                             l.Phone,
                             l.LeadSource,
                             l.Status,
-                            l.AssignedTo?.FullName ?? "Unassigned",
+                            l.CreatedByUser?.FirstName ?? "Unassigned",
                             l.CreatedAt
                             )).ToList();
 

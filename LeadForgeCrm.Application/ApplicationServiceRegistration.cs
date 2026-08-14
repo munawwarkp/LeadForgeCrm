@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using LeadForgeCrm.Application.Interfaces;
 using LeadForgeCrm.Domain.Entities;
+using LeadForgeCrm.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

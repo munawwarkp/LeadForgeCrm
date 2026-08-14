@@ -76,6 +76,26 @@ namespace LeadForgeCrmApi
             builder.Services.AddExceptionHandler<TenantNotResolvedExceptionHandler>();
             builder.Services.AddExceptionHandler<ConflictExceptionHandler>();
 
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
+                });
+            });
+
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(
+                        new JsonStringEnumConverter());
+                });
+
             var app = builder.Build();
 
 
@@ -96,6 +116,8 @@ namespace LeadForgeCrmApi
             app.UseExceptionHandler();
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthentication();
             app.UseMiddleware<TenantMiddleware>();

@@ -58,8 +58,9 @@ namespace LeadForgeCrm.Application.Commands
             {
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(7),
-                Token = refreshToken,
+                TokenHash = refreshToken,
                 UserId = user.Id,
+                Revoked = false,
                 TenantId = user.TenantId,
             });
           
@@ -69,7 +70,7 @@ namespace LeadForgeCrm.Application.Commands
             {
                 Id = user.Id,
                 TenantId = user.TenantId,
-                FullName = user.FullName,
+                FullName = user.FirstName,
                 Email = user.Email,
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,

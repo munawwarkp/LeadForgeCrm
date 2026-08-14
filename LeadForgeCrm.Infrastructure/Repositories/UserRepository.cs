@@ -18,6 +18,14 @@ namespace LeadForgeCrm.Infrastructure.Repositories
             _context = context;
         }
 
+
+        public async Task<List<User>> GetUsers()
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .AsNoTracking()
+                .ToListAsync();
+        }
         public async Task<User?> GetEmailAsync(string email)
         {
             return await _context.Users

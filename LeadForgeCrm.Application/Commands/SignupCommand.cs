@@ -111,7 +111,7 @@ namespace LeadForgeCrm.Application.Commands
                 var user = new User
                 {
                     Tenant = tenant,
-                    FullName = request.FullName,
+                    FirstName = request.FullName,
                     Email = request.Email,
                     Role = ownerRole,
                     CreatedAt = DateTime.UtcNow
@@ -125,7 +125,7 @@ namespace LeadForgeCrm.Application.Commands
                 return new UserDetailsDto
                 {
                     Id = user.Id,
-                    FullName = user.FullName,
+                    FullName = user.FirstName,
                     Email = user.Email,
                     TenantId = tenant.Id,
                     RoleName = "Owner"

@@ -20,15 +20,20 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
         public string LeadSource { get; set; } = null!;
         public string Status { get; set; } = LeadStatuses.New;
 
-        public int? AssignedToId { get; set; } //sales owner
-        public User? AssignedTo { get; set; } = null!;
+        public int? AssignedUserId { get; set; }
+        public int? CreatedByUserId { get; set; }   
+
+        public User? AssignedUser { get; set; }
+        public User? CreatedByUser { get; set; }
 
         // This is the key for your flow
         public int? ContactId { get; set; }
         public Contact? Contact { get; set; }
 
         public ICollection<Deal> Deals { get; set; } = new List<Deal>();
-        public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+        //public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+        public ICollection<Address> Addresses { get; set; } = new List<Address>();
+
 
 
         private static readonly Dictionary<LeadStatus, LeadStatus[]> AllowedTransitions = new()

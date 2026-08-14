@@ -50,14 +50,15 @@ namespace LeadForgeCrm.Application.Commands
                     LeadSource = request.LeadSource,
                     Status = LeadStatuses.New,
                     TenantId = tenantId,
-                    CreatedAt = DateTime.UtcNow                    
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedByUserId = userProvider.UserId
                 };
 
-                // if logged in user created it, assign automatically
-                if (request.LeadSource != "meta")
-                {
-                    lead.AssignedToId = userProvider.UserId;
-                }
+                //// if logged in user created it, assign automatically
+                //if (request.LeadSource != "meta")
+                //{
+                //    lead.AssignedToId = userProvider.UserId;
+                //}
 
                 await leadRepository.AddLead(lead);
                 await unitOfWork.SaveChangesAsync(cancellationToken);

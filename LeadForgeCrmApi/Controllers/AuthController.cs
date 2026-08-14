@@ -61,7 +61,7 @@ namespace LeadForgeCrm.Api.Controllers
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTime.UtcNow.AddDays(7)  //match the tokens lifetime
             };
-            Response.Cookies.Append("refreshToken", result.Data!.RefreshToken, cookieOptions);
+                Response.Cookies.Append("refreshToken", result.Data!.RefreshToken, cookieOptions);
 
 
             return Ok(new ApiResponse<SignInResponeDto>

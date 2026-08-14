@@ -23,7 +23,8 @@ namespace LeadForgeCrm.Application.Commands
         ITenantProvider tenantProvider,
         IPipelineRepository pipelineRepository,
         IPipelineStageRepository pipelineStageRepository,
-        IUnitOfWork unitOfWork) : IRequestHandler<CreateDealCommand, Result<CreateDealResponse>>
+        IUnitOfWork unitOfWork,
+        IUserProvider userProvider) : IRequestHandler<CreateDealCommand, Result<CreateDealResponse>>
     {
         public async Task<Result<CreateDealResponse>> Handle(CreateDealCommand request, CancellationToken cancellationToken)
         {
@@ -51,6 +52,8 @@ namespace LeadForgeCrm.Application.Commands
                 Probability = stage.DeafultProbability,
                 ExpectedCloseDate = request.request.ClosingDate,
                 Description = request.request.Description ?? string.Empty,
+                CreatedAt = DateTime.UtcNow
+                //CreatedByUserId = userProvider.UserId
             };
 
             await dealRepository.AddAsync(deal);

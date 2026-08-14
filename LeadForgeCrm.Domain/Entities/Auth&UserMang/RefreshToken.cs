@@ -13,12 +13,12 @@ namespace LeadForgeCrm.Domain.Entities.Auth_UserMang
         public User User { get; set; }
 
 
-        public string Token { get; set; }
+        public string TokenHash { get; set; } = string.Empty;
         public DateTime ExpiresAt { get; set; }
+        public DateTime CreatedAt { get; set; }
 
+        public bool Revoked { get; set; } = false;
         public DateTime? RevokedAt { get; set; }
-        //public string? ReplacedByToken { get; set; }
-
 
         public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
         public bool IsActive => RevokedAt == null && !IsExpired;

@@ -14,5 +14,6 @@ namespace LeadForgeCrm.Domain.Interfaces
         void Add(User user);
         Task<bool> IsExistUser(int AssignedToId);
 
+        Task<List<User>> GetUsers();
     }
 }

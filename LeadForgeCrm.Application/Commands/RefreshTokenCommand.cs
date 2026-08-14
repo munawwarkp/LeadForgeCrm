@@ -43,6 +43,7 @@ namespace LeadForgeCrm.Application.Commands
 
             //revoke old token
             storedRefreshToken.RevokedAt = DateTime.UtcNow;
+            storedRefreshToken.Revoked = true;
             refreshTokenRepository.Update(storedRefreshToken);
 
             //generate new tokens
@@ -59,11 +60,12 @@ namespace LeadForgeCrm.Application.Commands
 
             await refreshTokenRepository.AddRefreshTokenAsync(new Domain.Entities.Auth_UserMang.RefreshToken
             {
-                Token = refreshToken,
+                TokenHash = refreshToken,
                 UserId = user.Id,
                 TenantId = user.TenantId,
                 CreatedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddDays(7)
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                Revoked = false
             });
 
             await unitOfWork.SaveChangesAsync(cancellationToken);

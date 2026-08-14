@@ -11,5 +11,8 @@ namespace LeadForgeCrm.Domain.Interfaces
     {
         void Add(Role role);
         Task<Role?> GetByNameAsync(int tenantId, string roleName);
+
+        Task<List<Role>> GetRolesAsync();
+        Task<Role?> GetRoleById(int roleId);
     }
 }

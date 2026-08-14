@@ -26,6 +26,6 @@ namespace LeadForgeCrm.Domain.Entities.CrmCore
 
         public ICollection<Lead> Leads { get; set; } = new List<Lead>();
         public ICollection<Deal> Deals { get; set; } = new List<Deal>();
-
+        public ICollection<Address> Addresses { get; set; } = new List<Address>();
     }
 }

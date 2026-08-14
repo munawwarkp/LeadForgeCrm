@@ -177,9 +177,9 @@ namespace LeadForgeCrm.Infrastructure.Data
             modelBuilder.Entity<Lead>(entity =>
             {
                 // AssignedTo relationship
-                entity.HasOne(l => l.AssignedTo)
+                entity.HasOne(l => l.AssignedUser)
                       .WithMany() // or .WithMany(u => u.Leads) if User has a Leads collection
-                      .HasForeignKey(l => l.AssignedToId)
+                      .HasForeignKey(l => l.AssignedUserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 // Index for multi-tenancy
@@ -221,15 +221,23 @@ namespace LeadForgeCrm.Infrastructure.Data
 
             modelBuilder.Entity<Activity>(entity =>
             {
-                entity.HasOne(a => a.Lead)
-                    .WithMany(l => l.Activities) // Lead has ICollection<Activity>
-                    .HasForeignKey(a => a.LeadId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                //entity.HasOne(a => a.Lead)
+                //    .WithMany(l => l.Activities) // Lead has ICollection<Activity>
+                //    .HasForeignKey(a => a.LeadId)
+                //    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(a => a.Type)
+                    .HasConversion<string>();
+
+                entity.Property(entity => entity.EntityType)
+                    .HasConversion<string>();
+
+                entity.HasQueryFilter(a =>  !a.IsDeleted); // Global filter for soft delete
 
                 // User relationship
-                entity.HasOne(a => a.User)
+                entity.HasOne(a => a.AssignedUser)
                       .WithMany(u => u.Activities) // ← specify the navigation collection
-                      .HasForeignKey(a => a.UserId)
+                      .HasForeignKey(a => a.AssignedUserId)
                       .OnDelete(DeleteBehavior.Restrict);
 
                 // Tenant index for multi-tenancy
@@ -238,7 +246,7 @@ namespace LeadForgeCrm.Infrastructure.Data
 
             modelBuilder.Entity<RefreshToken>(entity =>
             {
-                entity.HasIndex(rt => rt.Token)
+                entity.HasIndex(rt => rt.TokenHash)
                        .IsUnique();
 
                 entity.HasOne(x => x.User)
@@ -283,7 +291,7 @@ namespace LeadForgeCrm.Infrastructure.Data
         public DbSet<CrmTask> CrmTasks { get; set; }
         public DbSet<Company> Companies { get; set; }
 
-
+        public DbSet<Address> Addresses { get; set; }
 
         public DbSet<PipeLine> PipeLines { get; set; }
         public DbSet<PipelineStage> PipelineStages { get; set; }

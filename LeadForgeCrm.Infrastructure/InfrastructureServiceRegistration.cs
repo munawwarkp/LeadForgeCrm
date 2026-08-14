@@ -10,6 +10,7 @@ using LeadForgeCrm.Infrastructure.Data;
 using LeadForgeCrm.Infrastructure.Options;
 using LeadForgeCrm.Infrastructure.Repositories;
 using LeadForgeCrm.Infrastructure.Seeding;
+using LeadForgeCrm.Infrastructure.Services;
 using LeadForgeCrm.Infrastructure.ServicesExternal;
 using LeadForgeCrm.Infrastructure.Tenancy;
 using LeadForgeCrm.Infrastructure.Uow;
@@ -74,11 +75,16 @@ namespace LeadForgeCrm.Infrastructure
             services.AddScoped<IDealRepository, DealRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
+
+
+            //services.AddScoped<IDealQueryService, DealQueryService>();
         
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IActivityEntityValidator, ActivityEntityValidator>();    
 
             services.AddScoped<PlanSeeder>();
             services.AddHostedService<PlanSeederHostedService>();

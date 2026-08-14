@@ -12,7 +12,8 @@ namespace LeadForgeCrm.Domain.Entities
 {
     public class User : BaseTenantEntity
     {
-        public string FullName { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
+        public string? LastName { get; set; }    
         public string Email { get; set; } = null!;
         public string PasswordHash { get; set; } = null!;
 
@@ -20,6 +21,7 @@ namespace LeadForgeCrm.Domain.Entities
         public Role Role { get; set; } 
 
         public bool IsActive { get; set; } = true;
+        public DateTime UpdatedAt { get; set; } 
 
         // Optional: list of activities performed by this user
         public ICollection<Activity> Activities { get; set; } = new List<Activity>();
